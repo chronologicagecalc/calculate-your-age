@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chronological Age Calculator – Age Formats, Age Bands &amp; Retest Planner</title>
+<meta name="description" content="Chronological age calculator that gives exact age in every format (Y;M;D, Y:M, decimal years, months), finds the age band and the date of the next band, plans retest dates and compares two ages.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Chronological Age Calculator – Every Format, Age Bands &amp; Retest Dates">
+<meta property="og:description" content="Exact chronological age in 8 formats, age band finder, retest timeline and two-person age comparison.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Chronological Age Calculator","applicationCategory":"EducationalApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Calculates chronological age in eight formats, finds the age band and next band date, builds a retest timeline and compares the ages of two people."}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is chronological age the same as age?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is your age counted from your date of birth. The word chronological is used when the exact figure in years, months and days is needed, or to separate it from other measures such as mental, developmental or biological age."}},
+{"@type":"Question","name":"How do I convert chronological age to decimal years?","acceptedAnswer":{"@type":"Answer","text":"Divide the number of days between the date of birth and the date by 365.2425, the average length of a calendar year. For example, 3,145 days is 8.61 years."}},
+{"@type":"Question","name":"How do I calculate chronological age in Excel?","acceptedAnswer":{"@type":"Answer","text":"Use DATEDIF(birth, date, \"y\") for years and DATEDIF(birth, date, \"ym\") for the extra months. For days, subtract the date of the last month-anniversary from the date instead of relying on the \"md\" unit, which Microsoft warns can give wrong results."}},
+{"@type":"Question","name":"What is an age band?","acceptedAnswer":{"@type":"Answer","text":"An age band is a range of ages, such as 7;6 to 7;8, that shares one norm table in a standardised test. Bands are often 1, 2, 3, 4, 6 or 12 months wide, depending on the test and the age group."}},
+{"@type":"Question","name":"When does a child move into the next age band?","acceptedAnswer":{"@type":"Answer","text":"On the day their age in whole months reaches the first month of the next band. The age band finder shows that date and how many days are left."}},
+{"@type":"Question","name":"How old was I on a past date?","acceptedAnswer":{"@type":"Answer","text":"Enter your date of birth and set 'Age on' to the past date. The calculator gives your exact age on that day."}},
+{"@type":"Question","name":"How do I compare two people's ages?","acceptedAnswer":{"@type":"Answer","text":"Use the compare tool. It shows who is older, the exact gap, when the older person was the younger person's current age, and when the younger person will reach the older person's current age."}},
+{"@type":"Question","name":"Does the calculator work for adults and older people?","acceptedAnswer":{"@type":"Answer","text":"Yes. Any date of birth from 1900 onwards works, and the same calendar rules apply at every age."}}]}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a href="#" class="brand"><span class="brand-i" aria-hidden="true"><i></i><i></i><i></i></span><span>Chronological Age <em>Calculator</em></span></a>
+    <button class="nav-btn" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+    <nav class="links" aria-label="Main">
+      <a href="#calculator">Calculator</a>
+      <a href="#tools">Tools</a>
+      <a href="#learn">Learn</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="calculator">
+  <div class="wrap">
+    <p class="pill">Free · No sign-up · Private</p>
+    <h1>Chronological Age <em>Calculator</em></h1>
+    <p class="sub">Get the exact chronological age in every format a form might ask for, see which age band it falls in, and find the date the next band starts. For printable guides and more age tools, see the original <a href="https://chronologicagecalc.com/">Chronological Age Calculator</a>.</p>
+
+    <form class="bar" id="mainForm" onsubmit="return false" aria-label="Chronological age calculator">
+      <label class="bar-f"><span>Date of birth</span><input type="date" id="dob" required></label>
+      <label class="bar-f"><span>Age on</span><input type="date" id="on" required></label>
+      <button type="button" class="bar-go" id="go">Calculate</button>
+    </form>
+    <p class="quick">Set "age on" to:
+      <button type="button" data-q="0">today</button>
+      <button type="button" data-q="-6">6 months ago</button>
+      <button type="button" data-q="12">in 1 year</button>
+    </p>
+  </div>
+
+  <div class="wrap">
+    <div class="panel" aria-live="polite">
+      <p class="perr" id="err" hidden></p>
+      <div id="res">
+        <div class="hero-res">
+          <div class="hr-main">
+            <span class="hr-lbl">Chronological age</span>
+            <p class="hr-num"><b id="hy">0</b><small>y</small><b id="hm">0</b><small>m</small><b id="hd">0</b><small>d</small></p>
+            <p class="hr-txt" id="htxt"></p>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Result views">
+            <button type="button" role="tab" aria-selected="true" data-tab="formats">Formats</button>
+            <button type="button" role="tab" aria-selected="false" data-tab="band">Age band</button>
+            <button type="button" role="tab" aria-selected="false" data-tab="steps">Working</button>
+          </div>
+        </div>
+
+        <div class="tab-body" id="tab-formats" role="tabpanel">
+          <ul class="formats" id="formats"></ul>
+        </div>
+
+        <div class="tab-body" id="tab-band" role="tabpanel" hidden>
+          <div class="band-top">
+            <label>Band width
+              <select id="bandW">
+                <option value="1">1 month</option>
+                <option value="2">2 months</option>
+                <option value="3" selected>3 months</option>
+                <option value="4">4 months</option>
+                <option value="6">6 months</option>
+                <option value="12">12 months</option>
+              </select>
+            </label>
+            <p class="band-hint">Use the band width from your test's norm tables.</p>
+          </div>
+          <div class="band-vis">
+            <div class="band-track" id="bandTrack"></div>
+            <div class="band-cards">
+              <div><span>Current band</span><b id="bandNow"></b></div>
+              <div><span>Entered this band</span><b id="bandFrom"></b></div>
+              <div class="hot"><span>Next band starts</span><b id="bandNext"></b><em id="bandLeft"></em></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-body" id="tab-steps" role="tabpanel" hidden>
+          <table class="work">
+            <thead><tr><th></th><th>Year</th><th>Month</th><th>Day</th></tr></thead>
+            <tbody>
+              <tr><th>Age on</th><td id="wTy"></td><td id="wTm"></td><td id="wTd"></td></tr>
+              <tr><th>Birth</th><td id="wBy"></td><td id="wBm"></td><td id="wBd"></td></tr>
+              <tr class="tot"><th>Age</th><td id="wAy"></td><td id="wAm"></td><td id="wAd"></td></tr>
+            </tbody>
+          </table>
+          <ol class="work-steps" id="wSteps"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tools" id="tools">
+  <div class="wrap">
+    <div class="t-head">
+      <span class="kick">Tools</span>
+      <h2>Plan ahead and <em>compare</em></h2>
+      <p>Two extra tools that use the same chronological age calculation as the calculator above.</p>
+    </div>
+
+    <div class="tool">
+      <div class="tool-info">
+        <span class="t-no">A</span>
+        <h3>Retest &amp; age timeline</h3>
+        <p>See what the chronological age will be on each date of a schedule: reviews every 6 months, yearly check-ups, or a three-year re-evaluation cycle. Each row shows the age band, so you can see when a new norm table will apply.</p>
+      </div>
+      <div class="tool-ui">
+        <div class="tl-in">
+          <label><span>Date of birth</span><input type="date" id="tlDob"></label>
+          <label><span>First date</span><input type="date" id="tlStart"></label>
+          <label><span>Every</span>
+            <select id="tlStep"><option value="1">1 month</option><option value="3">3 months</option><option value="6" selected>6 months</option><option value="12">12 months</option></select>
+          </label>
+          <label><span>For</span>
+            <select id="tlLen"><option value="1">1 year</option><option value="2">2 years</option><option value="3" selected>3 years</option><option value="5">5 years</option></select>
+          </label>
+        </div>
+        <div class="tl-wrap">
+          <table class="tl" id="tl">
+            <thead><tr><th>#</th><th>Date</th><th>Age</th><th>Months</th><th>Band (<span id="tlBandW">3</span> mo)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="tl-note" id="tlNote"></p>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-info">
+        <span class="t-no">B</span>
+        <h3>Compare two ages</h3>
+        <p>Siblings, twins born either side of midnight, a parent and child, or two candidates for an age-group team. Enter both birth dates to see who is older, the exact gap, and how the two ages line up over time.</p>
+      </div>
+      <div class="tool-ui">
+        <div class="cmp-in">
+          <div class="who">
+            <input type="text" id="aName" value="Person A" aria-label="First person's name" maxlength="30">
+            <input type="date" id="aDob" aria-label="First person's date of birth">
+          </div>
+          <span class="vs" aria-hidden="true">vs</span>
+          <div class="who">
+            <input type="text" id="bName" value="Person B" aria-label="Second person's name" maxlength="30">
+            <input type="date" id="bDob" aria-label="Second person's date of birth">
+          </div>
+        </div>
+        <div class="cmp-out" id="cmpOut" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="learn" id="learn">
+  <div class="wrap learn-grid">
+    <header class="l-head">
+      <span class="kick">Learn</span>
+      <h2>The practical guide to <em>chronological age</em></h2>
+      <p>How to write it, convert it, use it with norm tables, and work it out in a spreadsheet.</p>
+      <nav class="l-toc" aria-label="Guide sections">
+        <a href="#l1">Formats</a><a href="#l2">Converting</a><a href="#l3">Age bands</a><a href="#l4">Retests</a><a href="#l5">Comparing ages</a><a href="#l6">Spreadsheets</a><a href="#l7">Checklist</a>
+      </nav>
+    </header>
+
+    <div class="l-body">
+      <p class="lede">Chronological age is simply the time since birth. The skill is in writing it the way each form, test or system expects. One child can be "8;7;9", "8:7", "8.61 years" or "103 months" on four different documents, and every one of them is correct. A good chronological age calculator gives you all of them at once, so you never have to convert by hand.</p>
+
+      <h3 id="l1">1. The common formats of chronological age</h3>
+      <p>Different fields grew their own habits. Here is the same age, 8 years, 7 months and 9 days, written each way:</p>
+      <table class="fmt-table">
+        <thead><tr><th>Format</th><th>Example</th><th>Where you see it</th></tr></thead>
+        <tbody>
+          <tr><td>Years;months;days</td><td class="m">8;7;9</td><td>Psychological and speech-language record forms</td></tr>
+          <tr><td>Years:months</td><td class="m">8:7</td><td>Norm tables and age-equivalent charts</td></tr>
+          <tr><td>Years-months</td><td class="m">8-7</td><td>School reports and some score summaries</td></tr>
+          <tr><td>Words</td><td class="m">8 years 7 months</td><td>Letters, referrals and parent reports</td></tr>
+          <tr><td>Total months</td><td class="m">103 months</td><td>Infant scales, growth charts, research data</td></tr>
+          <tr><td>Decimal years</td><td class="m">8.61</td><td>Statistics, growth curves, sports science</td></tr>
+          <tr><td>Total days</td><td class="m">3,145 days</td><td>Neonatal care, precise research timing</td></tr>
+        </tbody>
+      </table>
+      <p>Watch out for one trap: <b>8:7 is not 8.7</b>. The colon means 8 years and 7 months (8.58 years). A decimal point means 8 and seven-tenths of a year (about 8 years 8 months). Mixing them up is one of the most common errors in reports.</p>
+
+      <h3 id="l2">2. Converting between formats</h3>
+      <p>The calculator does these conversions for you, but it helps to know the rules:</p>
+      <ul>
+        <li><b>To total months:</b> years × 12 + months. 8;7 → 8 × 12 + 7 = 103 months.</li>
+        <li><b>To decimal years:</b> total days ÷ 365.2425. Using days instead of months keeps the answer accurate to the day.</li>
+        <li><b>To decimal months:</b> total months + days ÷ 30.4375 (the average month). 103 months and 9 days ≈ 103.3 months.</li>
+        <li><b>Back from decimal years:</b> multiply the decimal part by 12 for months. 8.61 → 0.61 × 12 = 7.3, so about 8 years 7 months.</li>
+      </ul>
+      <p>Converting back from a decimal loses a few days, so keep the date of birth on file. You can always rebuild the exact age from it, but not the other way round.</p>
+
+      <h3 id="l3">3. Age bands and norm tables</h3>
+      <p>Standardised tests don't compare a child with everyone. They compare the child with others in the same <b>age band</b>, a slice of age such as 7;6 to 7;8. Young children change quickly, so their bands are narrow, often one to three months. Teenagers and adults change slowly, so their bands may span a year or more.</p>
+      <p>To find the band, take the age in whole months and see which slice it falls into. A child of 7;7;20 is in the 7;6–7;8 band with three-month bands, and in the 7;6–7;11 band with six-month bands. The days don't move the child up a band. Only the month count does, unless your manual tells you to round.</p>
+      <p>The <b>age band</b> tab in the calculator shows the current band, the day the child entered it, and the day the next band begins. That is useful when a test date is still flexible. Two weeks either way can decide which norm table applies, and an examiner may prefer to test well inside a band rather than on its edge.</p>
+
+      <h3 id="l4">4. Planning retests and reviews</h3>
+      <p>Many assessments are repeated to measure progress, and the timing matters. Retest too soon and the scores can rise just because the person remembers the tasks, the so-called practice effect. Leave it too long and you may miss the moment to change support. Test manuals and local guidelines usually suggest a minimum gap. Follow them, and record the chronological age at every test so progress can be read against the right norms.</p>
+      <p>In the United States, special-education law (IDEA) requires a re-evaluation at least once every three years unless parents and the school agree it is not needed. Many teams also review goals every year. The <b>retest timeline</b> tool lists the chronological age and band for every date in such a cycle, so you can spot in advance when a child will move into a new band or a new version of a test.</p>
+
+      <h3 id="l5">5. Comparing two ages</h3>
+      <p>The gap between two people's ages never changes. A brother born 2 years, 3 months and 10 days before his sister stays exactly that much older for life. What does change is the <b>ratio</b>. When he is 4 and she is not yet 2, he is more than twice her age. When he is 40 and she is 37, he is only about 6% older. That is why a one-year gap feels huge in a nursery and invisible at work.</p>
+      <p>The compare tool also answers two questions people often ask: <i>when was the older person the age the younger one is now?</i> and <i>when will the younger person reach the older one's current age?</i> Families use it for fun. Coaches use the same idea when two players sit on either side of an age-group cut-off.</p>
+
+      <h3 id="l6">6. Calculating chronological age in Excel and Google Sheets</h3>
+      <p>Spreadsheets are handy for a caseload or a class. Put the date of birth in A2 and the test date in B2:</p>
+      <div class="code">
+        <p><span>Years</span><code>=DATEDIF(A2, B2, "y")</code></p>
+        <p><span>Months</span><code>=DATEDIF(A2, B2, "ym")</code></p>
+        <p><span>Total months</span><code>=DATEDIF(A2, B2, "m")</code></p>
+        <p><span>Decimal years</span><code>=(B2-A2)/365.2425</code></p>
+      </div>
+      <p>For the days, avoid <code>DATEDIF(A2,B2,"md")</code>. Microsoft's own help page warns that this unit can return wrong or negative results around the end of a month. A safer formula counts the days from the last month-anniversary: <code>=B2-EDATE(A2, DATEDIF(A2,B2,"m"))</code>. Then check a few rows against this calculator, especially birthdays on the 29th, 30th or 31st.</p>
+
+      <h3 id="l7">7. Checklist before you report a chronological age</h3>
+      <ol class="check">
+        <li>Is the date of birth taken from an official record, not typed from memory?</li>
+        <li>Is the "age on" date the day of testing, or of the event the rule refers to?</li>
+        <li>Is the format the one the form or norm table expects (; or : or decimal)?</li>
+        <li>Has rounding been applied only if the manual says so?</li>
+        <li>For a baby born early, does the report also need corrected age?</li>
+        <li>Does the age band match the norm table you used to score?</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="wrap faq-in">
+    <h2>Questions, <em>answered</em></h2>
+    <div class="faq-list">
+      <details open><summary><span>01</span>Is chronological age the same as age?</summary><p>Yes, it is your age counted from your date of birth. The word "chronological" is used when the exact figure in years, months and days is needed, or to separate it from other measures such as mental, developmental or biological age.</p></details>
+      <details><summary><span>02</span>How do I convert chronological age to decimal years?</summary><p>Divide the number of days between the date of birth and the date by 365.2425, the average length of a calendar year. For example, 3,145 days is 8.61 years. The Formats tab does this for you.</p></details>
+      <details><summary><span>03</span>How do I calculate chronological age in Excel?</summary><p>Use DATEDIF(birth, date, "y") for years and DATEDIF(birth, date, "ym") for the extra months. For days, subtract the date of the last month-anniversary from the date instead of relying on the "md" unit, which Microsoft warns can give wrong results.</p></details>
+      <details><summary><span>04</span>What is an age band?</summary><p>An age band is a range of ages, such as 7;6 to 7;8, that shares one norm table in a standardised test. Bands are often 1, 2, 3, 4, 6 or 12 months wide, depending on the test and the age group.</p></details>
+      <details><summary><span>05</span>When does a child move into the next age band?</summary><p>On the day their age in whole months reaches the first month of the next band. The age band finder shows that date and how many days are left.</p></details>
+      <details><summary><span>06</span>How old was I on a past date?</summary><p>Enter your date of birth and set "Age on" to the past date. The calculator gives your exact age on that day.</p></details>
+      <details><summary><span>07</span>How do I compare two people's ages?</summary><p>Use the compare tool. It shows who is older, the exact gap, when the older person was the younger person's current age, and when the younger person will reach the older person's current age.</p></details>
+      <details><summary><span>08</span>Does the calculator work for adults and older people?</summary><p>Yes. Any date of birth from 1900 onwards works, and the same calendar rules apply at every age.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a href="#" class="brand light"><span class="brand-i" aria-hidden="true"><i></i><i></i><i></i></span><span>Chronological Age <em>Calculator</em></span></a>
+    <p>Chronological age calculator with formats, age bands, retest timeline and age comparison. Everything is calculated in your browser.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function dim(y,m){ return new Date(Date.UTC(y,m,0)).getUTCDate(); }
+  function pad(n){ return (n<10?'0':'')+n; }
+  function iso(o){ return o.y+'-'+pad(o.m)+'-'+pad(o.d); }
+  function parse(s){ var r=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||''); if(!r) return null; var o={y:+r[1],m:+r[2],d:+r[3]}; if(o.y<1900||o.m<1||o.m>12||o.d<1||o.d>dim(o.y,o.m)) return null; return o; }
+  function utc(o){ return Date.UTC(o.y,o.m-1,o.d); }
+  function fromUtc(ms){ var x=new Date(ms); return {y:x.getUTCFullYear(),m:x.getUTCMonth()+1,d:x.getUTCDate()}; }
+  function addDays(o,n){ return fromUtc(utc(o)+n*864e5); }
+  function shiftM(o,n){ var t=o.y*12+(o.m-1)+n, y=Math.floor(t/12), m=t-y*12+1; return {y:y,m:m,d:Math.min(o.d,dim(y,m))}; }
+  function today(){ var t=new Date(); return {y:t.getFullYear(),m:t.getMonth()+1,d:t.getDate()}; }
+  function days(a,b){ return Math.round((utc(b)-utc(a))/864e5); }
+  function fmt(o){ return o.d+' '+MON[o.m-1]+' '+o.y; }
+  function num(n){ return n.toLocaleString('en-US'); }
+  function pl(v,w){ return v+' '+w+(v===1?'':'s'); }
+
+  function age(b,t,steps){
+    if(b.m===2&&b.d===29&&dim(t.y,2)===28) b={y:b.y,m:2,d:28};
+    var ty=t.y, tm=t.m, td=t.d, s=steps||[];
+    if(td<b.d){
+      var pm=tm-1, py=ty; if(pm<1){pm=12;py--;}
+      var add=dim(py,pm); s.push('Day '+td+' is less than '+b.d+': borrow '+MONL[pm-1]+' ('+add+' days) → '+(td+add)+', month '+tm+' → '+(tm-1)+'.');
+      td+=add; tm--;
+      if(td<b.d){ var p2=pm-1, y2=py; if(p2<1){p2=12;y2--;} var a2=dim(y2,p2); s.push('Still less: borrow '+MONL[p2-1]+' ('+a2+' days) → '+(td+a2)+', month → '+(tm-1)+'.'); td+=a2; tm--; }
+    }
+    if(tm<b.m){ s.push('Month '+tm+' is less than '+b.m+': borrow 1 year → '+(tm+12)+', year '+ty+' → '+(ty-1)+'.'); tm+=12; ty--; }
+    s.push('Subtract: '+ty+' − '+b.y+' = '+(ty-b.y)+' years, '+tm+' − '+b.m+' = '+(tm-b.m)+' months, '+td+' − '+b.d+' = '+(td-b.d)+' days.');
+    return {y:ty-b.y,m:tm-b.m,d:td-b.d,adj:{y:ty,m:tm,d:td},bb:b};
+  }
+  function code(a){ return a.y+';'+a.m+';'+a.d; }
+  function ym(mo){ return Math.floor(mo/12)+':'+(mo%12); }
+  /* first date on which the age in whole months reaches target */
+  function dateAtMonths(b,target){
+    var c=shiftM(b,target);
+    for(var i=0;i<5;i++){ var a=age(b,c); if(a.y*12+a.m>=target) return c; c=addDays(c,1); }
+    return c;
+  }
+
+  /* ---------- main ---------- */
+  var cur=null;
+  function calc(){
+    var b=parse($('dob').value), t=parse($('on').value);
+    if(!b||!t){ err('Enter a date of birth and an "age on" date (from 1900 onwards).'); return; }
+    if(utc(b)>utc(t)){ err('The date of birth is after the "age on" date. Swap or correct the dates.'); return; }
+    $('err').hidden=true; $('res').hidden=false;
+    var st=[], a=age(b,t,st), D=days(b,t), mo=a.y*12+a.m;
+    cur={b:b,t:t,a:a,D:D,mo:mo};
+    $('hy').textContent=a.y; $('hm').textContent=a.m; $('hd').textContent=a.d;
+    $('htxt').textContent=pl(a.y,'year')+', '+pl(a.m,'month')+' and '+pl(a.d,'day')+' on '+fmt(t);
+    var F=[
+      ['Years;months;days',code(a),'Record forms'],
+      ['Years:months',a.y+':'+a.m,'Norm tables'],
+      ['Years-months',a.y+'-'+a.m,'School reports'],
+      ['In words',pl(a.y,'year')+' '+pl(a.m,'month'),'Letters & referrals'],
+      ['Total months',num(mo)+(a.d?' months '+pl(a.d,'day'):' months'),'Infant scales'],
+      ['Decimal months',(mo+a.d/30.4375).toFixed(1),'Research data'],
+      ['Decimal years',(D/365.2425).toFixed(2),'Statistics & growth'],
+      ['Weeks + days',num(Math.floor(D/7))+' weeks'+(D%7?' '+pl(D%7,'day'):''),'Baby & pregnancy'],
+      ['Total days',num(D),'Neonatal & research']
+    ];
+    var ul=$('formats'); ul.innerHTML='';
+    F.forEach(function(f){
+      var li=document.createElement('li');
+      li.innerHTML='<span class="f-n">'+f[0]+'</span><b class="f-v"></b><span class="f-u">'+f[2]+'</span><button type="button" class="f-c" aria-label="Copy '+f[0]+'">Copy</button>';
+      li.querySelector('.f-v').textContent=f[1];
+      li.querySelector('.f-c').addEventListener('click',function(){ copy(f[1],f[0]+' copied'); });
+      ul.appendChild(li);
+    });
+    /* working */
+    $('wTy').innerHTML=cell(t.y,a.adj.y); $('wTm').innerHTML=cell(t.m,a.adj.m); $('wTd').innerHTML=cell(t.d,a.adj.d);
+    $('wBy').textContent=a.bb.y; $('wBm').textContent=a.bb.m; $('wBd').textContent=a.bb.d;
+    $('wAy').textContent=a.y; $('wAm').textContent=a.m; $('wAd').textContent=a.d;
+    var ol=$('wSteps'); ol.innerHTML='';
+    if(b.m===2&&b.d===29&&a.bb.d===28){ st.unshift('Born on 29 February: in a common year 28 February is used as the birthday.'); }
+    st.forEach(function(s){ var li=document.createElement('li'); li.textContent=s; ol.appendChild(li); });
+    band();
+  }
+  function cell(o,n){ return o===n?String(o):'<s>'+o+'</s> <ins>'+n+'</ins>'; }
+  function err(m){ $('err').textContent=m; $('err').hidden=false; $('res').hidden=true; cur=null; }
+
+  function band(){
+    if(!cur) return;
+    var w=+$('bandW').value, mo=cur.mo, s=Math.floor(mo/w)*w, e=s+w-1;
+    $('bandNow').textContent=(w===1?ym(s):ym(s)+' – '+ym(e));
+    var from=dateAtMonths(cur.b,s), nx=dateAtMonths(cur.b,s+w), left=days(cur.t,nx);
+    $('bandFrom').textContent=fmt(from);
+    $('bandNext').textContent=fmt(nx)+' ('+ym(s+w)+')';
+    $('bandLeft').textContent=left===1?'1 day after the "age on" date':pl(left,'day')+' after the "age on" date';
+    /* track: previous, current, next two bands */
+    var tr=$('bandTrack'); tr.innerHTML='';
+    var span=days(from,nx), pos=Math.max(0,Math.min(100,days(from,cur.t)/span*100));
+    [s-w,s,s+w,s+2*w].forEach(function(bs,i){
+      if(bs<0) return;
+      var d=document.createElement('div'); d.className='seg'+(i===1?' now':'');
+      d.innerHTML='<span>'+(w===1?ym(bs):ym(bs)+'–'+ym(bs+w-1))+'</span>'+(i===1?'<i style="left:'+pos.toFixed(1)+'%"></i>':'');
+      tr.appendChild(d);
+    });
+    $('tlBandW').textContent=w; timeline();
+  }
+
+  /* tabs */
+  document.querySelectorAll('.tabs button').forEach(function(bt){
+    bt.addEventListener('click',function(){
+      document.querySelectorAll('.tabs button').forEach(function(x){ x.setAttribute('aria-selected','false'); });
+      bt.setAttribute('aria-selected','true');
+      ['formats','band','steps'].forEach(function(k){ $('tab-'+k).hidden=(k!==bt.getAttribute('data-tab')); });
+    });
+  });
+
+  ['dob','on'].forEach(function(id){ $(id).addEventListener('change',function(){ if(id==='dob'){ $('tlDob').value=$('dob').value; } calc(); }); $(id).addEventListener('input',calc); });
+  $('go').addEventListener('click',function(){ calc(); });
+  $('bandW').addEventListener('change',band);
+  document.querySelectorAll('[data-q]').forEach(function(bt){ bt.addEventListener('click',function(){ $('on').value=iso(shiftM(today(),+bt.getAttribute('data-q'))); calc(); }); });
+
+  /* ---------- timeline ---------- */
+  function timeline(){
+    var b=parse($('tlDob').value), s=parse($('tlStart').value), step=+$('tlStep').value, len=+$('tlLen').value, w=+$('bandW').value;
+    var tb=document.querySelector('#tl tbody'); tb.innerHTML='';
+    if(!b||!s){ $('tlNote').textContent='Enter a date of birth and a first date.'; return; }
+    var n=Math.floor(len*12/step), lastBand=null, changes=0, shown=0;
+    for(var i=0;i<=n;i++){
+      var dt=shiftM(s,i*step), tr=document.createElement('tr');
+      if(utc(dt)<utc(b)){ tr.className='pre'; tr.innerHTML='<td>'+(i+1)+'</td><td>'+fmt(dt)+'</td><td colspan="3">Before birth</td>'; tb.appendChild(tr); continue; }
+      var a=age(b,dt), mo=a.y*12+a.m, bs=Math.floor(mo/w)*w, bl=w===1?ym(bs):ym(bs)+'–'+ym(bs+w-1), nb=lastBand!==null&&bl!==lastBand;
+      if(nb) changes++;
+      tr.className=nb?'newband':'';
+      tr.innerHTML='<td>'+(i+1)+'</td><td>'+fmt(dt)+'</td><td class="m">'+code(a)+'</td><td class="m">'+mo+'</td><td>'+bl+(nb?' <em>new</em>':'')+'</td>';
+      tb.appendChild(tr); lastBand=bl; shown++;
+    }
+    $('tlNote').textContent=(n+1)+' dates · the age band changes '+pl(changes,'time')+' over this schedule.';
+  }
+  ['tlDob','tlStart','tlStep','tlLen'].forEach(function(id){ $(id).addEventListener('change',timeline); });
+
+  /* ---------- compare ---------- */
+  function esc(s){ return s.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function compare(){
+    var A={n:$('aName').value.trim()||'Person A',b:parse($('aDob').value)}, B={n:$('bName').value.trim()||'Person B',b:parse($('bDob').value)}, out=$('cmpOut'), t=today();
+    if(!A.b||!B.b){ out.innerHTML='<p class="c-bad">Enter both dates of birth.</p>'; return; }
+    if(utc(A.b)>utc(t)||utc(B.b)>utc(t)){ out.innerHTML='<p class="c-bad">Both dates of birth need to be today or earlier.</p>'; return; }
+    if(utc(A.b)===utc(B.b)){ out.innerHTML='<p class="c-big">'+esc(A.n)+' and '+esc(B.n)+' were born on the same day.</p><p>They are exactly the same chronological age: <b>'+code(age(A.b,t))+'</b>.</p>'; return; }
+    var O=utc(A.b)<utc(B.b)?A:B, Y=O===A?B:A;
+    var gap=age(O.b,Y.b), gd=days(O.b,Y.b), oa=age(O.b,t), ya=age(Y.b,t), od=days(O.b,t), yd=days(Y.b,t);
+    /* when was older person the younger's current age */
+    var target=ya.y*12+ya.m, w1=addDays(dateAtMonths(O.b,target),0);
+    for(var i=0;i<40;i++){ var aa=age(O.b,w1); if(aa.y*12+aa.m===target&&aa.d===ya.d) break; w1=addDays(w1,1); }
+    var t2=oa.y*12+oa.m, w2=dateAtMonths(Y.b,t2);
+    for(var j=0;j<40;j++){ var bb=age(Y.b,w2); if(bb.y*12+bb.m===t2&&bb.d===oa.d) break; w2=addDays(w2,1); }
+    var ratio=yd>0?(od/yd):null;
+    out.innerHTML=
+      '<p class="c-big"><b>'+esc(O.n)+'</b> is older by <span>'+code(gap)+'</span></p>'+
+      '<p class="c-sub">'+pl(gap.y,'year')+', '+pl(gap.m,'month')+' and '+pl(gap.d,'day')+' · '+num(gd)+' days · '+num(Math.floor(gd/7))+' weeks</p>'+
+      '<div class="c-grid">'+
+        '<div><span>'+esc(O.n)+' today</span><b>'+code(oa)+'</b></div>'+
+        '<div><span>'+esc(Y.n)+' today</span><b>'+code(ya)+'</b></div>'+
+        '<div><span>Age ratio</span><b>'+(ratio?ratio.toFixed(2)+'×':'–')+'</b></div>'+
+      '</div>'+
+      '<ul class="c-list">'+
+        '<li>'+esc(O.n)+' was '+esc(Y.n)+'\'s current age ('+code(ya)+') on <b>'+fmt(w1)+'</b>.</li>'+
+        '<li>'+esc(Y.n)+' will be '+esc(O.n)+'\'s current age ('+code(oa)+') on <b>'+fmt(w2)+'</b>.</li>'+
+        '<li>The gap of '+code(gap)+' stays the same forever, but the ratio keeps shrinking towards 1.</li>'+
+      '</ul>';
+  }
+  ['aName','bName','aDob','bDob'].forEach(function(id){ $(id).addEventListener('input',compare); $(id).addEventListener('change',compare); });
+
+  /* ---------- copy, toast, menu ---------- */
+  var tt;
+  function toast(m){ var e=$('toast'); e.textContent=m; e.hidden=false; clearTimeout(tt); tt=setTimeout(function(){ e.hidden=true; },2000); }
+  function copy(txt,msg){
+    function fb(){ var ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); toast(msg); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ toast(msg); },fb); } else fb();
+  }
+  var nb=document.querySelector('.nav-btn'), links=document.querySelector('.links');
+  nb.addEventListener('click',function(){ var o=links.classList.toggle('open'); nb.setAttribute('aria-expanded',o); });
+  links.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ links.classList.remove('open'); nb.setAttribute('aria-expanded','false'); }); });
+
+  /* ---------- init ---------- */
+  var t0=today();
+  $('on').value=iso(t0); $('dob').value='2018-03-27';
+  $('tlDob').value='2018-03-27'; $('tlStart').value=iso(t0);
+  $('aName').value='Sam'; $('aDob').value='2015-05-12';
+  $('bName').value='Ella'; $('bDob').value='2017-08-22';
+  calc(); compare();
+})();
+</script>
+</body>
+</html>
